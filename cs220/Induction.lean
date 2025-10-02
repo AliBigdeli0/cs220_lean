@@ -1,6 +1,10 @@
-import Mathlib
+import Mathlib.Data.Nat.Basic
+import Mathlib.Tactic
 
-/-- Theorem: For all natural numbers n ≥ 4, 4^n ≥ n^4. --/
+/-- Theorem: For all natural numbers n ≥ 4, 4^n ≥ n^4.
+    This is a slightly complicated example as the natural statement starts at n = 4 not n = 0.
+    We an induction principle for this kind of statement, but it entails some extra work compared
+    to starting from zero. -/
 theorem exp_ge_pow (n : ℕ) (hn : 4 ≤ n) : 4^n ≥ n^4 := by
   induction n, hn using Nat.le_induction
 
@@ -29,3 +33,16 @@ theorem exp_ge_pow (n : ℕ) (hn : 4 ≤ n) : 4^n ≥ n^4 := by
               have : 4*n ≤ n^2 := by nlinarith
               nlinarith
           _ = (n + 1)^4 := by ring
+
+-- A clever tactic significantly shortens the proof
+theorem exp_ge_pow_fancy (n : ℕ) (hn : 4 ≤ n) : 4^n ≥ n^4 := by
+  induction n, hn using Nat.le_induction
+  case base => rfl
+  case succ n hn ih =>
+    calc 4^(n + 1)
+      _ ≥ 4 * n^4           := by omega
+      _ ≥ (n + 1)^4         := by
+        -- Introduce n' ∈ ℕ such that n' + 4 = n which tactics like nlinarith handle better
+        obtain ⟨n', rfl⟩ := Nat.exists_eq_add_of_le hn
+        ring_nf
+        nlinarith
