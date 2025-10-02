@@ -1,0 +1,9 @@
+* 
+
+!*/ 
+!*.lean 
+!.gitignore
+!lakefile.toml
+!lean-toolchain
+
+.lake/*

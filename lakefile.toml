@@ -1,0 +1,15 @@
+name = "cs220"
+version = "0.1.0"
+defaultTargets = ["cs220"]
+
+[[lean_lib]]
+name = "cs220"
+
+[[lean_exe]]
+name = "cs_220_exe"
+root = "main.lean"
+
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
